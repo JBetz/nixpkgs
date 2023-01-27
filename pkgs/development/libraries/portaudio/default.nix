@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchurl
-, alsa-lib
+# , alsa-lib
 , pkg-config
 , which
 , AudioUnit
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   nativeBuildInputs = [ pkg-config which ];
-  buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
+  # buildInputs = lib.optional (!stdenv.isDarwin) alsa-lib;
 
   configureFlags = [ "--disable-mac-universal" "--enable-cxx" ];
 
@@ -44,11 +44,6 @@ stdenv.mkDerivation rec {
   # not sure why, but all the headers seem to be installed by the make install
   installPhase = ''
     make install
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    # fixup .pc file to find alsa library
-    sed -i "s|-lasound|-L${alsa-lib.out}/lib -lasound|" "$out/lib/pkgconfig/"*.pc
-  '' + lib.optionalString stdenv.isDarwin ''
-    cp include/pa_mac_core.h $out/include/pa_mac_core.h
   '';
 
   meta = with lib; {
