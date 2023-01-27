@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, buildPackages, pkg-config, cmake
-, alsa-lib, glib, libjack2, libsndfile, libpulseaudio
+, alsa-lib, glib, libpulseaudio
 , AudioUnit, CoreAudio, CoreMIDI, CoreServices
 }:
 
@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ buildPackages.stdenv.cc pkg-config cmake ];
 
-  buildInputs = [ glib libsndfile libjack2 ]
+  buildInputs = [ glib ]
     ++ lib.optionals stdenv.isLinux [ alsa-lib libpulseaudio ]
     ++ lib.optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreMIDI CoreServices ];
 
-  cmakeFlags = [ "-Denable-framework=off" ];
+  cmakeFlags = [ "-Denable-framework=off" "-Denable-jack=off" "-Denable-libsndfile=off" ];
 
   meta = with lib; {
     description = "Real-time software synthesizer based on the SoundFont 2 specifications";
