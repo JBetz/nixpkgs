@@ -1,5 +1,5 @@
 { config, lib, stdenv, fetchurl, gettext, meson, ninja, pkg-config, perl, python3
-, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
+, libiconv, zlib, libffi, pcre, libelf, gnome, libselinux, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45, libxslt
 # use util-linuxMinimal to avoid circular dependency (util-linux, systemd, glib)
 , util-linuxMinimal ? null
 , buildPackages
@@ -63,9 +63,9 @@ stdenv.mkDerivation rec {
 
     # Add support for the GNOME’s default terminal emulator.
     # https://gitlab.gnome.org/GNOME/glib/-/issues/2618
-    ./gnome-console-support.patch
+    # ./gnome-console-support.patch
     # Do the same for Pantheon’s terminal emulator.
-    ./elementary-terminal-support.patch
+    # ./elementary-terminal-support.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libelf setupHook pcre
   ] ++ optionals (!stdenv.hostPlatform.isWindows) [
-    bash gnum4 # install glib-gettextize and m4 macros for other apps to use
+    gnum4 # install glib-gettextize and m4 macros for other apps to use
   ] ++ optionals stdenv.isLinux [
     libselinux
     util-linuxMinimal # for libmount
